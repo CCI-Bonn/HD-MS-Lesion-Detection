@@ -1,9 +1,9 @@
 from jenspetersen/hd-glio-auto:latest
 
-ARG USERNAME="chandra"
-ARG UID="1004"
-ARG GID="1004"
-ARG PASSWORD="projectms"
+ARG USERNAME="user"
+ARG UID="1005"
+ARG GID="1005"
+ARG PASSWORD="password"
 ARG APT_PACKAGES="sudo \
     rsync"
 ARG PIP_PACKAGES="pytest \
@@ -31,8 +31,8 @@ RUN cp /usr/bin/python3 /usr/bin/python && \
 
 RUN pip3 install --upgrade tensorboard
 
-COPY ./nrad_mil /nrad_mil
-RUN cd /nrad_mil && \
+COPY ./nrad_torch  /nrad_torch 
+RUN cd /nrad_torch && \
     pip install --editable .
 
 USER $USERNAME
