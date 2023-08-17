@@ -48,30 +48,37 @@ docker run --rm -v /path/Dataset/:/data --shm-size 128g --gpus 0,1 ms_lesion_det
 ```
 The mounted directory on the host should contain a directory named 'image_dataset'.
 
-Expected folder Structure for 'image_dataset':
--patient_1
---FLAIR_1.nii.gz
---FLAIR_2_reg.gz
--patient_2
---FLAIR_1.nii.gz
---FLAIR_2_reg.gz
--patient_3
---FLAIR_1.nii.gz
---FLAIR_2_reg.gz
+Expected folder Structure for 'image_dataset'
+
+patient_1\
+--FLAIR_1.nii.gz\
+--FLAIR_2_reg.gz\
+patient_2\
+--FLAIR_1.nii.gz\
+--FLAIR_2_reg.gz\
+patient_3\
+--FLAIR_1.nii.gz\
+--FLAIR_2_reg.gz\
 etc.
 
-* no specific naming pattern is required for the patient folders, the FLAIR images should be brain extracted and co-registered using FSL. 
+No specific naming pattern is required for the patient folders, the FLAIR images should be brain extracted and co-registered using FSL. 
 
 Ground truth data as a csv file (file should be named 'labels.csv') with columns named 'exam_pair' and 'new_lesion'.
 
-exam_pair,new_lesion
-patient1,1 0
-patient2,0 1
-etc.
+|exam_pair| new_lesion|
+|---------| ----------|
+|patient1 | 1 0       |
+|patient2 | 0 1       |
+|...      | ...       |
 
 '1 0' indicates a new lesion and '0 1' indicates now new lesion.
 
-If now labels are available, pass dummy values in the 'new_lesion' column so that the inference script can work.
+If no labels are available, pass dummy values in the 'new_lesion' column so that the inference script can work.
 
-Prediction results for each model can be found in the folder /path/Dataset//pred*/history/predictions_best_model.csv 
+Prediction results for each model can be found in the folder /path/Dataset//pred*/history/predictions_best_model.csv \
 Both the softmax values and binary class labels obtained using argmin function are indicated in the csv file.
+
+## Requirements
+NVIDIA GPU - 32 GB VRAM \
+NVIDIA driver >= 450.80.02 \
+Docker with NVIDIA Container Toolkit installed 
