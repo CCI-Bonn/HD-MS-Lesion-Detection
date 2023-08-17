@@ -35,3 +35,43 @@ git clone https://github.com/NeuroAI-HD/HD-MS-Lesion-Detection.git
 cd HD-MS-Lesion-Detection
 docker build -t <image_name>:<tag> .
 ```
+## Inference and evaluation
+The trained models can be used for inference and evaluation using the shared [docker image](https://drive.google.com/file/d/1-SHpLcl6oIAn6v5HwA4Sikvehi9Lxzvz/view?usp=sharing). 
+
+1. Build docker image from the tar file.
+```
+docker load -i lesion_detection.tar.gz
+```
+2. Run the docker container using the following command.
+```
+docker run --rm -v /path/Dataset/:/data --shm-size 128g --gpus 0,1 ms_lesion_detection:latest
+```
+The mounted directory on the host should contain a directory named 'image_dataset'.
+
+Expected folder Structure for 'image_dataset':
+-patient_1
+--FLAIR_1.nii.gz
+--FLAIR_2_reg.gz
+-patient_2
+--FLAIR_1.nii.gz
+--FLAIR_2_reg.gz
+-patient_3
+--FLAIR_1.nii.gz
+--FLAIR_2_reg.gz
+etc.
+
+* no specific naming pattern is required for the patient folders, the FLAIR images should be brain extracted and co-registered using FSL. 
+
+Ground truth data as a csv file (file should be named 'labels.csv') with columns named 'exam_pair' and 'new_lesion'.
+
+exam_pair,new_lesion
+patient1,1 0
+patient2,0 1
+etc.
+
+'1 0' indicates a new lesion and '0 1' indicates now new lesion.
+
+If now labels are available, pass dummy values in the 'new_lesion' column so that the inference script can work.
+
+Prediction results for each model can be found in the folder /path/Dataset//pred*/history/predictions_best_model.csv 
+Both the softmax values and binary class labels obtained using argmin function are indicated in the csv file.
